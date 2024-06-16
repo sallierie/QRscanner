@@ -17,14 +17,19 @@
         <script>
             const items = [];
             const allUrlParams = {}
+            let redirectUrl = "";
             const splits = window?.location?.href?.split("?")
             if (splits?.length > 1) {
                 const split = splits[1].split("&")
-                
 
                 for(const item of split) {
                     const itemSplit = item.split("=");
-                    allUrlParams[itemSplit[0]] = itemSplit[1];
+                    if (itemSplit?.length && itemSplit[0] === "redirect") {
+                        redirectUrl = itemSplit[1]
+                    }
+                    else {
+                        allUrlParams[itemSplit[0]] = itemSplit[1];
+                    }
                 }
             }
 
@@ -32,14 +37,14 @@
                 const dataObj = { ...allUrlParams, items };
                 const data = JSON.stringify(dataObj);
                 $.ajax({
-                    url: 'https://hook.eu2.make.com/wotbn4w3crt1ajlwvv8tpds2t7ep31g0',
+                    url: redirectUrl,
                     data,
                     dataType: "json",
                     contentType: "application/json; charset=utf-8",
                     crossDomain: true,
                     type: 'POST',
                     success: function(response) {
-                        console.log(response);
+                        window.close();
                     },
                     error: function(xhr, status, error) {
                         console.error(status, error);
