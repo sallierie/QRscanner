@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>QR Code Scanner</title>
+        <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+        <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    </head>
+    <body>
+        <div id="reader" width="600px"></div>
+        <div hidden id="successMessage" style="color:green">Het is gelukt!!!!!</div>
+        <div hidden id="failedMessage" style="color:red">Het is niet gelukt, probeer nog 1x !!!!!</div>
+        <div>   
+            <button type="button" id="buttonId">Submit</button>
+        </div>
+        <script>
+            const items = [];
+            const allUrlParams = {}
+            const splits = window?.location?.href?.split("?")
+            if (splits?.length > 1) {
+                const split = splits[1].split("&")
+                
+
+                for(const item of split) {
+                    const itemSplit = item.split("=");
+                    allUrlParams[itemSplit[0]] = itemSplit[1];
+                }
+            }
+
+            $("#buttonId").on("click", () => {
+                const dataObj = { ...allUrlParams, items };
+                const data = JSON.stringify(dataObj);
+                $.ajax({
+                    url: 'https://hook.eu2.make.com/wotbn4w3crt1ajlwvv8tpds2t7ep31g0',
+                    data,
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    crossDomain: true,
+                    type: 'POST',
+                    success: function(response) {
+                        console.log(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(status, error);
+                    }
+                });
+            });
+
+            function onScanSuccess(decodedText, decodedResult) {
+                if (!items.includes(decodedText)) {
+                    items.push(decodedText);
+                    $( "#successMessage" ).removeAttr("hidden");
+                    $( "#failedMessage" ).attr("hidden", true);
+                } else {
+                    $( "#successMessage" ).attr("hidden", true);
+                    $( "#failedMessage" ).removeAttr("hidden");
+                }
+            }
+    
+            function onScanFailure(error) {
+                console.warn(`Code scan error = ${error}`);
+            }
+    
+            let html5QrcodeScanner = new Html5QrcodeScanner(
+                "reader",
+                { fps: 10, qrbox: {width: 250, height: 250} },
+                /* verbose= */ false);
+            html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+        </script>
+    </body>
+</html>
