@@ -18,7 +18,8 @@
                 background-color: #f5f5f5;
             }
             #reader {
-                width: 600px;
+                width: 90%;
+                max-width: 600px;
                 margin-bottom: 20px;
             }
             #failedMessage {
@@ -45,6 +46,15 @@
                 display: block;
                 margin: 0 auto 10px;
             }
+            #buttonContainer {
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100%;
+                display: flex;
+                justify-content: center;
+            }
             #buttonId {
                 padding: 10px 20px;
                 font-size: 16px;
@@ -66,7 +76,7 @@
     <body>
         <div id="reader"></div>
         <div hidden id="failedMessage">QR code is al gescanned</div>
-        <div>
+        <div id="buttonContainer">
             <button type="button" id="buttonId">Submit</button>
         </div>
         <div id="successContainer">
@@ -131,6 +141,11 @@
                     }, 3000);
                 } else {
                     $("#failedMessage").removeAttr("hidden");
+
+                    // Hide the error message after 3 seconds
+                    setTimeout(() => {
+                        $("#failedMessage").attr("hidden", true);
+                    }, 3000);
                 }
             }
 
@@ -147,5 +162,6 @@
         </script>
     </body>
 </html>
+
 
 
