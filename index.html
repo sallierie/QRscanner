@@ -81,26 +81,6 @@
                 font-size: 16px;
                 cursor: pointer;
             }
-            #successMessageContainer {
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background-color: #d4edda;
-                color: #155724;
-                border: 1px solid #c3e6cb;
-                padding: 20px;
-                border-radius: 10px;
-                display: none;
-                text-align: center;
-                z-index: 1000;
-            }
-            #successMessageContainer img {
-                width: 50px;
-                height: 50px;
-                display: block;
-                margin: 0 auto 10px;
-            }
         </style>
     </head>
     <body>
@@ -118,10 +98,6 @@
             <p>Are you sure you want to send <span id="itemCountDialog">0</span> items?</p>
             <button id="confirmYes">Yes</button>
             <button id="confirmNo">No</button>
-        </div>
-        <div id="successMessageContainer">
-            <img src="https://img.icons8.com/ios-filled/50/000000/checkmark.png" alt="Success Icon">
-            <div>QR codes attached successfully. You can close the page now.</div>
         </div>
         <script>
             const items = [];
@@ -157,11 +133,7 @@
                     crossDomain: true,
                     type: 'POST',
                     success: function(response) {
-                        if (response.status === 204) {
-                            $("#successMessageContainer").fadeIn();
-                        } else {
-                            console.error("Unexpected response:", response);
-                        }
+                        window.close();
                     },
                     error: function(xhr, status, error) {
                         console.error(status, error);
@@ -212,4 +184,5 @@
         </script>
     </body>
 </html>
+
 
