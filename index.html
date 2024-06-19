@@ -18,8 +18,7 @@
                 background-color: #f5f5f5;
             }
             #reader {
-                width: 90%;
-                max-width: 600px;
+                width: 600px;
                 margin-bottom: 20px;
             }
             #failedMessage {
@@ -46,15 +45,6 @@
                 display: block;
                 margin: 0 auto 10px;
             }
-            #buttonContainer {
-                position: fixed;
-                bottom: 20px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 100%;
-                display: flex;
-                justify-content: center;
-            }
             #buttonId {
                 padding: 10px 20px;
                 font-size: 16px;
@@ -71,18 +61,43 @@
             #buttonId:active {
                 background-color: #1e7e34;
             }
+            #confirmationDialog {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: #ffffff;
+                color: #000000;
+                border: 1px solid #000000;
+                padding: 20px;
+                border-radius: 10px;
+                display: none;
+                text-align: center;
+                z-index: 1000;
+            }
+            #confirmationDialog button {
+                padding: 10px 20px;
+                margin: 5px;
+                font-size: 16px;
+                cursor: pointer;
+            }
         </style>
     </head>
     <body>
         <div id="reader"></div>
         <div hidden id="failedMessage">QR code is al gescanned</div>
-        <div id="buttonContainer">
+        <div>
             <button type="button" id="buttonId">Submit</button>
         </div>
         <div id="successContainer">
             <img src="https://img.icons8.com/ios-filled/50/000000/checkmark.png" alt="Success Icon">
             <div id="successText">QR code gescanned</div>
             <div id="itemCount">Items: 0</div>
+        </div>
+        <div id="confirmationDialog">
+            <p>Are you sure you want to send <span id="itemCountDialog">0</span> items?</p>
+            <button id="confirmYes">Yes</button>
+            <button id="confirmNo">No</button>
         </div>
         <script>
             const items = [];
@@ -103,6 +118,11 @@
             }
 
             $("#buttonId").on("click", () => {
+                $("#itemCountDialog").text(items.length);
+                $("#confirmationDialog").fadeIn();
+            });
+
+            $("#confirmYes").on("click", () => {
                 const dataObj = { ...allUrlParams, items };
                 const data = JSON.stringify(dataObj);
                 $.ajax({
@@ -119,6 +139,10 @@
                         console.error(status, error);
                     }
                 });
+            });
+
+            $("#confirmNo").on("click", () => {
+                $("#confirmationDialog").fadeOut();
             });
 
             function onScanSuccess(decodedText, decodedResult) {
@@ -141,8 +165,6 @@
                     }, 3000);
                 } else {
                     $("#failedMessage").removeAttr("hidden");
-
-                    // Hide the error message after 3 seconds
                     setTimeout(() => {
                         $("#failedMessage").attr("hidden", true);
                     }, 3000);
@@ -162,6 +184,5 @@
         </script>
     </body>
 </html>
-
 
 
