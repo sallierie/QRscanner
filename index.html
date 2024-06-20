@@ -163,6 +163,9 @@
                 $("#itemCount").text(`Items: ${items.length}`);
                 $("#successContainer").fadeIn();
 
+                // Update submit button text with item count
+                $("#buttonId").text(`Submit (${items.length} items)`);
+
                 // Stop the scanner
                 html5QrcodeScanner.clear();
 
@@ -171,12 +174,12 @@
 
                     // Restart the scanner
                     html5QrcodeScanner.render(onScanSuccess, onScanFailure);
-                }, 3000);
+                }, 1200);
             } else {
                 $("#failedMessage").removeAttr("hidden");
                 setTimeout(() => {
                     $("#failedMessage").attr("hidden", true);
-                }, 3000);
+                }, 1200);
             }
         }
 
@@ -193,4 +196,5 @@
     </script>
 </body>
 </html>
+
 
